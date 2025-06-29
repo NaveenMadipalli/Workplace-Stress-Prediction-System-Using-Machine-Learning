@@ -62,6 +62,3 @@ This project predicts stress levels in a workplace environment based on physiolo
 
 ---
 
-## 🧑‍💻 Authors
-- Madipalli Naveen Arun Jaswanth Goud
-- [Add your group member names here]
