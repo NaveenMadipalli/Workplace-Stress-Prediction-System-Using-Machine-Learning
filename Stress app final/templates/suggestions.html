@@ -1,0 +1,170 @@
+{% extends "layout.html" %}
+
+{% block title %}Suggestions - Workplace Stress Detection{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col">
+            <h2>Personalized Stress Management Suggestions</h2>
+            <p class="text-muted">Based on your most recent stress prediction on {{ record.date.strftime('%B %d, %Y at %I:%M %p') }}</p>
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Current Stress Level</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="display-1 mb-3 
+                        {% if record.stress_level == 'Low' %}stress-low
+                        {% elif record.stress_level == 'Medium' %}stress-medium
+                        {% elif record.stress_level == 'High' %}stress-high
+                        {% else %}stress-extreme{% endif %}">
+                        {% if record.stress_level == 'Low' %}😊
+                        {% elif record.stress_level == 'Medium' %}🙂
+                        {% elif record.stress_level == 'High' %}😐
+                        {% else %}😨{% endif %}
+                    </div>
+                    <h3 class="
+                        {% if record.stress_level == 'Low' %}stress-low
+                        {% elif record.stress_level == 'Medium' %}stress-medium
+                        {% elif record.stress_level == 'High' %}stress-high
+                        {% else %}stress-extreme{% endif %}">
+                        {{ record.stress_level }}
+                    </h3>
+                    <p class="lead">{{ record.stress_percentage }}%</p>
+                    
+                    <div class="mt-4">
+                        <h6>Contributing Factors:</h6>
+                        <ul class="list-group">
+                            {% if record.sleep_hours < 6 %}
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                Low Sleep Hours
+                                <span class="badge bg-warning rounded-pill">{{ record.sleep_hours }}</span>
+                            </li>
+                            {% endif %}
+                            
+                            {% if record.workload == 'Heavy' %}
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                High Workload
+                                <span class="badge bg-warning rounded-pill">{{ record.workload }}</span>
+                            </li>
+                            {% endif %}
+
+                            {% if record.working_area_temperature == 'Uncomfortable' %}
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                Uncomfortable Temperature
+                                <span class="badge bg-warning rounded-pill">{{ record.working_area_temperature }}</span>
+                            </li>
+                            {% endif %}
+
+                            {% if record.noise_levels == 'Noisy' %}
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                Noisy Environment
+                                <span class="badge bg-warning rounded-pill">{{ record.noise_levels }}</span>
+                            </li>
+                            {% endif %}
+
+                            {% if record.working_hours in ['Long Day', 'Extreme Overtime'] %}
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                Long Working Hours
+                                <span class="badge bg-warning rounded-pill">{{ record.working_hours }}</span>
+                            </li>
+                            {% endif %}
+
+                            {% if record.type_of_work == 'Demanding' %}
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                Demanding Work
+                                <span class="badge bg-warning rounded-pill">{{ record.type_of_work }}</span>
+                            </li>
+                            {% endif %}
+
+                            {% if record.body_temperature == 'Not Normal' %}
+                            <li class="list-group-item list-group-item-warning d-flex justify-content-between align-items-center">
+                                Body Temperature Issue
+                                <span class="badge bg-warning rounded-pill">{{ record.body_temperature }}</span>
+                            </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <a href="{{ url_for('stress_predictor') }}" class="btn btn-primary btn-sm">
+                        Take New Assessment
+                    </a>
+                    <a href="{{ url_for('analysis') }}" class="btn btn-outline-dark btn-sm float-end">
+                        View Analysis
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Your Personalized Suggestions</h5>
+                </div>
+                <div class="card-body">
+                    {% for suggestion in suggestions %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ suggestion.title }}</h5>
+                            <p class="card-text">{{ suggestion.content }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- General wellness tips -->
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="mb-0">General Wellness Tips</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">Physical Activity</h6>
+                                    <p class="card-text">Regular exercise can help reduce stress hormones and stimulate endorphin production. Even a 20-minute walk can make a difference.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">Healthy Eating</h6>
+                                    <p class="card-text">Maintain a balanced diet rich in fruits, vegetables, and whole grains. Avoid excessive caffeine and sugar which can increase anxiety.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">Mindfulness Practices</h6>
+                                    <p class="card-text">Try meditation, deep breathing, or progressive muscle relaxation for 10 minutes daily to help reduce stress levels.</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">Social Connection</h6>
+                                    <p class="card-text">Maintain relationships with friends, family, or colleagues. Talking about your stressors can provide relief and new perspectives.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

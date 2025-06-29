@@ -1,0 +1,61 @@
+{% extends "layout.html" %}
+
+{% block title %}Home - Workplace Stress Detection{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="jumbotron bg-light p-5 rounded">
+        <h1 class="display-4">Workplace Stress Detection</h1>
+        <p class="lead">Analyze and manage your workplace stress levels with our AI-powered stress prediction system.</p>
+        <hr class="my-4">
+        <p>Our system uses machine learning to predict your stress level based on various workplace and personal factors. 
+           Track your stress over time and get personalized suggestions to improve your well-being.</p>
+        <div class="mt-4">
+            {% if current_user.is_authenticated %}
+                <a class="btn btn-primary btn-lg me-2" href="{{ url_for('stress_predictor') }}">Predict Stress Level</a>
+                {% if current_user.is_admin %}
+                    <a class="btn btn-outline-dark btn-lg" href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a>
+                {% else %}
+                    <a class="btn btn-outline-dark btn-lg" href="{{ url_for('user_dashboard') }}">Your Dashboard</a>
+                {% endif %}
+            {% else %}
+                <a class="btn btn-primary btn-lg me-2" href="{{ url_for('signup') }}">Sign Up</a>
+                <a class="btn btn-outline-dark btn-lg" href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Analyze Factors</h5>
+                    <p class="card-text">Our system analyzes various factors that contribute to workplace stress, including working hours, sleep quality, environment temperature, noise levels, and more.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Track Progress</h5>
+                    <p class="card-text">Monitor your stress levels over time with our intuitive dashboard and visualization tools. Identify patterns and track improvements.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">Get Recommendations</h5>
+                    <p class="card-text">Receive personalized suggestions and strategies to manage your stress levels based on your specific workplace factors.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if not current_user.is_authenticated %}
+    <div class="text-center mt-5">
+        <p>Already have an account? <a href="{{ url_for('login') }}">Login here</a></p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
